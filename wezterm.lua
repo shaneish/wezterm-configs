@@ -4,29 +4,20 @@ local os = require 'os';
 local config = {}
 
 wezterm.on("trigger-vim-with-scrollback", function(window, pane)
-  -- Retrieve the current viewport's text.
-  -- Pass an optional number of lines (eg: 2000) to retrieve
-  -- that number of lines starting from the bottom of the viewport
   local scrollback = pane:get_lines_as_text();
 
-  -- Create a temporary file to pass to vim
   local name = os.tmpname();
   local f = io.open(name, "w+");
   f:write(scrollback);
   f:flush();
   f:close();
 
-  -- Open a new window running vim and tell it to open the file
   window:perform_action(wezterm.action{ SpawnCommandInNewTab = {
     domain = "CurrentPaneDomain",
     args={ "nvim", '-U', '$HOME/.config/nvim/minit.vim', '+', name }
     }
   }, pane)
 
-  -- wait "enough" time for vim to read the file before we remove it.
-  -- The window creation and process spawn are asynchronous
-  -- wrt. running this script and are not awaitable, so we just pick
-  -- a number.
   wezterm.sleep_ms(1000);
   os.remove(name);
 end)
@@ -39,17 +30,22 @@ wezterm.on('update-right-status', function(window, pane)
   window:set_right_status(name or '')
 end)
 
-config.font = wezterm.font 'JetBrains Mono'
-config.enable_scroll_bar = true
-local colors, metadata = wezterm.color.load_base16_scheme('~/.config/wezterm/theme.yaml')
-config.color_scheme = colors
--- config.enable_kitty_keyboard = true
-config.set_environment_variables = {
-  PATH = "$PATH:/opt/homebrew/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin",
-}
-config.default_prog = { 'fish' }
+if wezterm.target_triple:find("windows") ~= nil then
+    config.default_domain = 'WSL:Ubuntu'
+else
+    config.set_environment_variables = {
+      PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin",
+    }
+end
 
+config.font = wezterm.font 'JetBrains Mono'
+config.window_decorations = "RESIZE"
+config.font_size = 9.0
+config.enable_scroll_bar = true
+config.color_scheme = "Black Noodle"
+config.default_prog = { 'fish' }
 config.leader = { key = 'Space', mods = 'SHIFT' }
+config.window_close_confirmation = "NeverPrompt"
 
 config.key_tables = {
 
