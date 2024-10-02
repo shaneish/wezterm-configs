@@ -34,7 +34,7 @@ if wezterm.target_triple:find("windows") ~= nil then
     config.default_domain = 'WSL:Ubuntu'
 else
     config.set_environment_variables = {
-      PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin:/opt/homebrew/bin/wezterm",
+      PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin:/opt/homebrew/bin",
     }
 end
 
