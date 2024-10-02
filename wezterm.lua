@@ -34,7 +34,7 @@ if wezterm.target_triple:find("windows") ~= nil then
     config.default_domain = 'WSL:Ubuntu'
 else
     config.set_environment_variables = {
-      PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin",
+      PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin:/opt/homebrew/bin/wezterm",
     }
 end
 
@@ -78,7 +78,7 @@ config.key_tables = {
 
 config.keys = {
   {
-    key = 'Space',
+    key = 'Enter',
     mods = 'LEADER',
     action = wezterm.action.ActivateKeyTable {
         name = 'pane_adjust',
@@ -101,7 +101,7 @@ config.keys = {
   },
   {
     key = 'w',
-    mods = 'LEADER',
+    mods = 'CTRL|SHIFT',
     action = wezterm.action.CloseCurrentPane { confirm = false },
   },
   {
@@ -115,7 +115,7 @@ config.keys = {
     action = wezterm.action.SpawnTab 'DefaultDomain'
   },
   {
-    key = 'Enter',
+    key = 'Space',
     mods = 'LEADER',
     action = wezterm.action.TogglePaneZoomState,
   },
@@ -137,8 +137,8 @@ config.keys = {
   { key = 'p', mods = 'LEADER', action = wezterm.action.PasteFrom 'Clipboard' },
   { key = 'S', mods = 'LEADER', action = wezterm.action.Search("CurrentSelectionOrEmptyString")},
   {
-    key = 's',
-    mods = 'CTRL|SHIFT',
+    key = 'W',
+    mods = 'LEADER',
     action = wezterm.action.QuickSelectArgs {
       patterns = {
         '[\\w\\-\\.\\/]+',
@@ -147,16 +147,11 @@ config.keys = {
   },
   {
     key = 'w',
-    mods = 'CTRL|SHIFT',
-    action = wezterm.action.Search {
-      Regex = '[\\w\\-\\.\\/]+',
-    },
-  },
-  {
-    key = 'f',
     mods = 'LEADER',
-    action = wezterm.action.Search {
-      Regex = '[\\w\\-\\.\\/]+\\.[\\w\\.]+\\s*$',
+    action = wezterm.action.QuickSelectArgs {
+      patterns = {
+        '\\S+',
+      },
     },
   },
 }
