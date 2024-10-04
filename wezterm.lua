@@ -93,7 +93,7 @@ config.keys = {
     },
   },
   {
-    key = '|',
+    key = 'h',
     mods = 'LEADER',
     action = wezterm.action.SplitHorizontal {
         domain = 'CurrentPaneDomain',
