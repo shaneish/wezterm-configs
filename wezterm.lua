@@ -34,7 +34,7 @@ if wezterm.target_triple:find("windows") ~= nil then
     config.default_domain = 'WSL:Ubuntu'
 else
     config.set_environment_variables = {
-      PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin:/opt/homebrew/bin",
+      PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin:/opt/homebrew/bin:/usr/local/bin",
     }
 end
 
@@ -44,7 +44,7 @@ config.font_size = 9.0
 config.enable_scroll_bar = true
 config.color_scheme = "Black Noodle"
 config.default_prog = { 'fish' }
-config.leader = { key = 'Space', mods = 'SHIFT' }
+config.leader = { key = 'Enter', mods = 'CTRL' }
 config.window_close_confirmation = "NeverPrompt"
 
 config.key_tables = {
@@ -86,8 +86,8 @@ config.keys = {
     },
   },
   {
-    key = 'v',
-    mods = 'LEADER',
+    key = 'Enter',
+    mods = 'CTRL|SHIFT',
     action = wezterm.action.SplitVertical {
         domain = 'CurrentPaneDomain',
     },
@@ -121,23 +121,25 @@ config.keys = {
   },
   { key = "l", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(1) },
   { key = "h", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
-  { key = "h", mods = "LEADER", action = wezterm.action.ActivatePaneDirection('Prev')},
-  { key = "l", mods = "LEADER", action = wezterm.action.ActivatePaneDirection('Next')},
+  { key = "<", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev')},
+  { key = ">", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Next')},
   { key = '=', mods = 'CTRL|SHIFT|CMD', action = wezterm.action.IncreaseFontSize },
   { key = '-', mods = 'CTRL|SHIFT|CMD', action = wezterm.action.DecreaseFontSize },
   { key = "b", mods = "CTRL|SHIFT", action = wezterm.action{ EmitEvent = "trigger-vim-with-scrollback" } },
-  { key = 'k', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(-1) },
-  { key = 'j', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(1) },
-  { key = 'k', mods = 'CTRL|SHIFT|CMD', action = wezterm.action.ScrollByLine(-1) },
-  { key = 'j', mods = 'CTRL|SHIFT|CMD', action = wezterm.action.ScrollByLine(1) },
+  { key = 'k', mods = 'CTRL|SHIFT|CMD', action = wezterm.action.ScrollByPage(-1) },
+  { key = 'j', mods = 'CTRL|SHIFT|CMD', action = wezterm.action.ScrollByPage(1) },
+  { key = 'k', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(-1) },
+  { key = 'j', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(1) },
   { key = 'k', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(-1) },
   { key = 'j', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(1) },
   { key = 's', mods = 'LEADER', action = wezterm.action.ShowTabNavigator },
   { key = 'c', mods = 'LEADER', action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
+  { key = 'y', mods = 'CTRL|SHIFT', action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
   { key = 'p', mods = 'LEADER', action = wezterm.action.PasteFrom 'Clipboard' },
+  { key = 'p', mods = 'CTRL|SHIFT', action = wezterm.action.PasteFrom 'Clipboard' },
   { key = 'S', mods = 'LEADER', action = wezterm.action.Search("CurrentSelectionOrEmptyString")},
   {
-    key = 'W',
+    key = 'w',
     mods = 'LEADER',
     action = wezterm.action.QuickSelectArgs {
       patterns = {
@@ -146,7 +148,7 @@ config.keys = {
     },
   },
   {
-    key = 'w',
+    key = 'W',
     mods = 'LEADER',
     action = wezterm.action.QuickSelectArgs {
       patterns = {
