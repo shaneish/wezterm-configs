@@ -1,0 +1,41 @@
+[colors]
+ansi = [
+    "#000000",
+    "#21ff21",
+    "#f3ecd4",
+    "#b80d0d",
+    "#99bf00",
+    "#999999",
+    "#aaaaaa",
+    "#c1c1c1",
+]
+background = "#000000"
+brights = [
+    "#333333",
+    "#21ff21",
+    "#f3ecd4",
+    "#b80d0d",
+    "#99bf00",
+    "#999999",
+    "#aaaaaa",
+    "#c1c1c1",
+]
+cursor_bg = "#08ff08"
+cursor_border = "#08ff08"
+foreground = "#ffffff"
+selection_bg = "#ffffff"
+cursor_fg = "#000000"
+selection_fg = "#000000"
+
+[colors.indexed]
+16 = "#aaaaaa"
+17 = "#444444"
+18 = "#121212"
+19 = "#222222"
+20 = "#999999"
+21 = "#999999"
+
+[metadata]
+aliases = []
+author = "shalst: stolen from - metalelf0 (https://github.com/metalelf0)"
+name = "Cacti"

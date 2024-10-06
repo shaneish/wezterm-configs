@@ -4,7 +4,7 @@ local os = require 'os';
 local config = {}
 
 wezterm.on("trigger-vim-with-scrollback", function(window, pane)
-  local scrollback = pane:get_lines_as_text();
+  local scrollback = pane:get_lines_as_text(pane:get_dimensions().scrollback_rows);
 
   local name = os.tmpname();
   local f = io.open(name, "w+");
@@ -30,6 +30,15 @@ wezterm.on('update-right-status', function(window, pane)
   window:set_right_status(name or '')
 end)
 
+wezterm.on('select-and-paste', function(window, pane)
+  wezterm.action.QuickSelectArgs {
+   patterns = {
+      '[\\w\\-\\.\\/~]+',
+    },
+  }
+  wezterm.action.PasteFrom 'Clipboard'
+end)
+
 if wezterm.target_triple:find("windows") ~= nil then
     config.default_domain = 'WSL:Ubuntu'
 else
@@ -38,14 +47,40 @@ else
     }
 end
 
-config.font = wezterm.font 'JetBrains Mono'
-config.window_decorations = "RESIZE"
-config.font_size = 9.0
+config.font = wezterm.font 'JetBrains Mono Semibold'
+config.window_decorations = "NONE"
+config.font_size = 9.5
 config.enable_scroll_bar = true
 config.color_scheme = "Black Noodle"
 config.default_prog = { 'fish' }
 config.leader = { key = 'Enter', mods = 'CTRL' }
 config.window_close_confirmation = "NeverPrompt"
+config.adjust_window_size_when_changing_font_size = false
+config.window_background_opacity = 0.65
+config.window_padding = {
+  left = 10,
+  right = 10,
+  top = 5,
+  bottom = 2,
+}
+config.colors = {
+    tab_bar = {
+        background = "rgba(0,0,0,0)"
+    },
+}
+config.window_frame = {
+    font_size = 7.5
+}
+config.inactive_pane_hsb = {
+  hue = 1.2,
+  saturation = 1.0,
+  brightness = 0.4,
+}
+config.foreground_text_hsb = {
+  hue = 1.0,
+  saturation = 1.8,
+  brightness = 1.5,
+}
 
 config.key_tables = {
 
@@ -138,12 +173,13 @@ config.keys = {
   { key = 'p', mods = 'LEADER', action = wezterm.action.PasteFrom 'Clipboard' },
   { key = 'p', mods = 'CTRL|SHIFT', action = wezterm.action.PasteFrom 'Clipboard' },
   { key = 'S', mods = 'LEADER', action = wezterm.action.Search("CurrentSelectionOrEmptyString")},
+  { key = 'c', mods = 'CTRL|SHIFT', action = wezterm.action { EmitEvent = "select-and-paste" } },
   {
     key = 'w',
     mods = 'LEADER',
     action = wezterm.action.QuickSelectArgs {
       patterns = {
-        '[\\w\\-\\.\\/]+',
+        '[\\w\\-\\.\\/~]+',
       },
     },
   },
