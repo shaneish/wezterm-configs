@@ -53,10 +53,10 @@ config.font_size = 9.5
 config.enable_scroll_bar = true
 config.color_scheme = "Black Noodle"
 config.default_prog = { 'fish' }
-config.leader = { key = 'Enter', mods = 'CTRL' }
+config.leader = { key = 'Space', mods = 'SHIFT' }
 config.window_close_confirmation = "NeverPrompt"
 config.adjust_window_size_when_changing_font_size = false
-config.window_background_opacity = 0.65
+config.window_background_opacity = 0.80
 config.window_padding = {
   left = 10,
   right = 10,
@@ -113,7 +113,7 @@ config.key_tables = {
 
 config.keys = {
   {
-    key = 'Enter',
+    key = 'p',
     mods = 'LEADER',
     action = wezterm.action.ActivateKeyTable {
         name = 'pane_adjust',
@@ -128,7 +128,7 @@ config.keys = {
     },
   },
   {
-    key = 'h',
+    key = '\\',
     mods = 'LEADER',
     action = wezterm.action.SplitHorizontal {
         domain = 'CurrentPaneDomain',
@@ -142,6 +142,11 @@ config.keys = {
   {
     key = 'q',
     mods = 'LEADER',
+    action = wezterm.action.CloseCurrentPane { confirm = false },
+  },
+  {
+    key = 'q',
+    mods = 'LEADER',
     action = wezterm.action.CloseCurrentTab { confirm = false },
   },
   {
@@ -150,14 +155,16 @@ config.keys = {
     action = wezterm.action.SpawnTab 'DefaultDomain'
   },
   {
-    key = 'Space',
+    key = 'Enter',
     mods = 'LEADER',
     action = wezterm.action.TogglePaneZoomState,
   },
-  { key = "l", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(1) },
-  { key = "h", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
-  { key = "<", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev')},
-  { key = ">", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Next')},
+  { key = "<", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(1) },
+  { key = ">", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
+  { key = "h", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
+  { key = "l", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
+  { key = "h", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev')},
+  { key = "l", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Next')},
   { key = '=', mods = 'CTRL|SHIFT', action = wezterm.action.IncreaseFontSize },
   { key = '-', mods = 'CTRL|SHIFT', action = wezterm.action.DecreaseFontSize },
   { key = "b", mods = "CTRL|SHIFT", action = wezterm.action{ EmitEvent = "trigger-vim-with-scrollback" } },
@@ -168,10 +175,8 @@ config.keys = {
   { key = 'k', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(-1) },
   { key = 'j', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(1) },
   { key = 's', mods = 'LEADER', action = wezterm.action.ShowTabNavigator },
-  { key = 'c', mods = 'LEADER', action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
-  { key = 'y', mods = 'CTRL|SHIFT', action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
-  { key = 'p', mods = 'LEADER', action = wezterm.action.PasteFrom 'Clipboard' },
-  { key = 'p', mods = 'CTRL|SHIFT', action = wezterm.action.PasteFrom 'Clipboard' },
+  { key = 'c', mods = 'ALT', action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
+  { key = 'v', mods = 'ALT', action = wezterm.action.PasteFrom 'Clipboard' },
   { key = 'S', mods = 'LEADER', action = wezterm.action.Search("CurrentSelectionOrEmptyString")},
   { key = 'c', mods = 'CTRL|SHIFT', action = wezterm.action { EmitEvent = "select-and-paste" } },
   {
@@ -190,6 +195,19 @@ config.keys = {
       patterns = {
         '\\S+',
       },
+    },
+  },
+  {
+    key = 'r',
+    mods = 'LEADER',
+    action = wezterm.action.PromptInputLine {
+      description = 'Rename tab:',
+      initial_value = '',
+      action = wezterm.action_callback(function(window, pane, line)
+        if line then
+          window:active_tab():set_title(line)
+        end
+      end),
     },
   },
 }
