@@ -48,15 +48,15 @@ else
 end
 
 config.font = wezterm.font 'JetBrains Mono Semibold'
-config.window_decorations = "NONE"
+config.window_decorations = "RESIZE"
 config.font_size = 9.5
 config.enable_scroll_bar = true
 config.color_scheme = "Black Noodle"
 config.default_prog = { 'fish' }
-config.leader = { key = 'Space', mods = 'SHIFT' }
+config.leader = { key = 'Space', mods = 'SHIFT', timeout_milliseconds = 1000 }
 config.window_close_confirmation = "NeverPrompt"
 config.adjust_window_size_when_changing_font_size = false
-config.window_background_opacity = 0.80
+config.window_background_opacity = 0.99
 config.window_padding = {
   left = 10,
   right = 10,
@@ -87,8 +87,8 @@ config.key_tables = {
   pane_adjust = {
     { key = 'm', action = wezterm.action.AdjustPaneSize { 'Left', 1 } },
     { key = '/', action = wezterm.action.AdjustPaneSize { 'Right', 1 } },
-    { key = ',', action = wezterm.action.AdjustPaneSize { 'Up', 1 } },
-    { key = '.', action = wezterm.action.AdjustPaneSize { 'Down', 1 } },
+    { key = '.', action = wezterm.action.AdjustPaneSize { 'Up', 1 } },
+    { key = ',', action = wezterm.action.AdjustPaneSize { 'Down', 1 } },
     { key = 'h', action = wezterm.action.ActivatePaneDirection 'Left' },
     { key = 'l', action = wezterm.action.ActivatePaneDirection 'Right' },
     { key = 'k', action = wezterm.action.ActivatePaneDirection 'Up' },
@@ -159,17 +159,19 @@ config.keys = {
     mods = 'LEADER',
     action = wezterm.action.TogglePaneZoomState,
   },
-  { key = "<", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(1) },
-  { key = ">", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
-  { key = "h", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
-  { key = "l", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
+  { key = ">", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(1) },
+  { key = "<", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
+  { key = "l", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
+  { key = "Tab", mods = "SHIFT", action = wezterm.action.ActivatePaneDirection('Prev') },
+  { key = "Tab", mods = "CTRL", action = wezterm.action.ActivatePaneDirection('Next') },
+  { key = "h", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
   { key = "h", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev')},
   { key = "l", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Next')},
   { key = '=', mods = 'CTRL|SHIFT', action = wezterm.action.IncreaseFontSize },
   { key = '-', mods = 'CTRL|SHIFT', action = wezterm.action.DecreaseFontSize },
   { key = "b", mods = "CTRL|SHIFT", action = wezterm.action{ EmitEvent = "trigger-vim-with-scrollback" } },
-  { key = 'k', mods = 'CTRL|SHIFT|ALT', action = wezterm.action.ScrollByPage(-1) },
-  { key = 'j', mods = 'CTRL|SHIFT|ALT', action = wezterm.action.ScrollByPage(1) },
+  { key = '}', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(-1) },
+  { key = '{', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(1) },
   { key = 'k', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(-1) },
   { key = 'j', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(1) },
   { key = 'k', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(-1) },
@@ -179,6 +181,17 @@ config.keys = {
   { key = 'v', mods = 'ALT', action = wezterm.action.PasteFrom 'Clipboard' },
   { key = 'S', mods = 'LEADER', action = wezterm.action.Search("CurrentSelectionOrEmptyString")},
   { key = 'c', mods = 'CTRL|SHIFT', action = wezterm.action { EmitEvent = "select-and-paste" } },
+  { key = 'N', mods = 'LEADER', action = wezterm.action_callback(function(win, pane)
+      local tab, window = pane:move_to_new_window()
+    end)
+  },
+  {
+    key = 'n',
+    mods = 'LEADER',
+    action = wezterm.action_callback(function(win, pane)
+      local tab, window = pane:move_to_new_tab()
+    end),
+  },
   {
     key = 'w',
     mods = 'LEADER',
@@ -202,7 +215,6 @@ config.keys = {
     mods = 'LEADER',
     action = wezterm.action.PromptInputLine {
       description = 'Rename tab:',
-      initial_value = '',
       action = wezterm.action_callback(function(window, pane, line)
         if line then
           window:active_tab():set_title(line)

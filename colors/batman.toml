@@ -20,8 +20,8 @@ brights = [
     "#aaaaaa",
     "#c1c1c1",
 ]
-cursor_bg = "#ffed29"
-cursor_border = "#ffed29"
+cursor_bg = "#ffd700"
+cursor_border = "#ffd700"
 foreground = "#ffffff"
 selection_bg = "#ffffff"
 cursor_fg = "#000000"
