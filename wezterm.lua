@@ -47,13 +47,14 @@ else
     }
 end
 
+config.disable_default_key_bindings = true
 config.font = wezterm.font 'JetBrains Mono Semibold'
 config.window_decorations = "RESIZE"
 config.font_size = 9.5
 config.enable_scroll_bar = true
 config.color_scheme = "Black Noodle"
 config.default_prog = { 'fish' }
-config.leader = { key = 'Space', mods = 'SHIFT', timeout_milliseconds = 1000 }
+config.leader = { key = 'Space', mods = 'CTRL|SHIFT', timeout_milliseconds = 1000 }
 config.window_close_confirmation = "NeverPrompt"
 config.adjust_window_size_when_changing_font_size = false
 config.window_background_opacity = 0.99
@@ -155,18 +156,16 @@ config.keys = {
     action = wezterm.action.SpawnTab 'DefaultDomain'
   },
   {
-    key = 'Enter',
+    key = 'Space',
     mods = 'LEADER',
     action = wezterm.action.TogglePaneZoomState,
   },
-  { key = ">", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(1) },
-  { key = "<", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
+  { key = "L", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(1) },
+  { key = "H", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
   { key = "l", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
-  { key = "Tab", mods = "SHIFT", action = wezterm.action.ActivatePaneDirection('Prev') },
-  { key = "Tab", mods = "CTRL", action = wezterm.action.ActivatePaneDirection('Next') },
+  { key = "Tab", mods = "SHIFT", action = wezterm.action.ActivatePaneDirection('Next') },
+  { key = "Tab", mods = "SHIFT|CTRL", action = wezterm.action.ActivatePaneDirection('Prev') },
   { key = "h", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
-  { key = "h", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev')},
-  { key = "l", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Next')},
   { key = '=', mods = 'CTRL|SHIFT', action = wezterm.action.IncreaseFontSize },
   { key = '-', mods = 'CTRL|SHIFT', action = wezterm.action.DecreaseFontSize },
   { key = "b", mods = "CTRL|SHIFT", action = wezterm.action{ EmitEvent = "trigger-vim-with-scrollback" } },

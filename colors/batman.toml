@@ -2,30 +2,30 @@
 ansi = [
     "#000000",
     "#ffd700",
-    "#f3ecd4",
+    "#636363",
     "#b80d0d",
     "#ffd700",
+    "#c0c8cf",
     "#999999",
     "#aaaaaa",
-    "#c1c1c1",
 ]
-background = "#000000"
+background = "#141414"
 brights = [
     "#333333",
-    "#ffd700",
+    "#ffdd05",
     "#f3ecd4",
-    "#b80d0d",
-    "#ffd700",
+    "#ed1010",
+    "#ffdd05",
+    "#444444",
     "#999999",
     "#aaaaaa",
-    "#c1c1c1",
 ]
 cursor_bg = "#ffd700"
 cursor_border = "#ffd700"
 foreground = "#ffffff"
 selection_bg = "#ffffff"
-cursor_fg = "#000000"
-selection_fg = "#000000"
+cursor_fg = "#141414"
+selection_fg = "#141414"
 
 [colors.indexed]
 16 = "#aaaaaa"
