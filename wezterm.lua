@@ -40,16 +40,40 @@ wezterm.on('select-and-paste', function(window, pane)
 end)
 
 if wezterm.target_triple:find("windows") ~= nil then
-    config.default_domain = 'WSL:Ubuntu'
+  config.default_domain = 'WSL:Ubuntu'
+  config.window_decorations = "RESIZE"
+  config.window_padding = {
+    left = 10,
+    right = 10,
+    top = 5,
+    bottom = 5,
+  }
+elseif wezterm.target_triple:find("darwin") ~= nil then
+  config.window_decorations = "RESIZE"
+  config.set_environment_variables = {
+   PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin:/opt/homebrew/bin:/usr/local/bin",
+  }
+  config.window_padding = {
+    left = 10,
+    right = 10,
+    top = 5,
+    bottom = 2,
+  }
 else
-    config.set_environment_variables = {
-      PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin:/opt/homebrew/bin:/usr/local/bin",
-    }
+  config.window_decorations = "NONE"
+  config.set_environment_variables = {
+   PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin:/home/linuxbrew/bin:/home/linuxbrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/go/bin",
+  }
+  config.window_padding = {
+    left = 10,
+    right = 10,
+    top = 5,
+    bottom = 30,
+  }
 end
 
 config.disable_default_key_bindings = true
 config.font = wezterm.font 'JetBrains Mono Semibold'
-config.window_decorations = "RESIZE"
 config.font_size = 9.5
 config.enable_scroll_bar = true
 config.color_scheme = "Black Noodle"
@@ -58,12 +82,6 @@ config.leader = { key = 'Space', mods = 'CTRL|SHIFT', timeout_milliseconds = 100
 config.window_close_confirmation = "NeverPrompt"
 config.adjust_window_size_when_changing_font_size = false
 config.window_background_opacity = 0.99
-config.window_padding = {
-  left = 10,
-  right = 10,
-  top = 5,
-  bottom = 2,
-}
 config.colors = {
     tab_bar = {
         background = "rgba(0,0,0,0)"
@@ -113,6 +131,11 @@ config.key_tables = {
 }
 
 config.keys = {
+  {
+    key = 'R',
+    mods = 'LEADER',
+    action = wezterm.action.ReloadConfiguration,
+  },
   {
     key = 'p',
     mods = 'LEADER',
@@ -166,8 +189,8 @@ config.keys = {
   { key = "Tab", mods = "SHIFT", action = wezterm.action.ActivatePaneDirection('Next') },
   { key = "Tab", mods = "SHIFT|CTRL", action = wezterm.action.ActivatePaneDirection('Prev') },
   { key = "h", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
-  { key = '=', mods = 'CTRL|SHIFT', action = wezterm.action.IncreaseFontSize },
-  { key = '-', mods = 'CTRL|SHIFT', action = wezterm.action.DecreaseFontSize },
+  { key = '+', mods = 'CTRL|SHIFT', action = wezterm.action.IncreaseFontSize },
+  { key = '_', mods = 'CTRL|SHIFT', action = wezterm.action.DecreaseFontSize },
   { key = "b", mods = "CTRL|SHIFT", action = wezterm.action{ EmitEvent = "trigger-vim-with-scrollback" } },
   { key = '}', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(-1) },
   { key = '{', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(1) },
