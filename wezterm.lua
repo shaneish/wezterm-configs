@@ -183,6 +183,8 @@ config.keys = {
     mods = 'LEADER',
     action = wezterm.action.TogglePaneZoomState,
   },
+  { key = '<', mods = 'CTRL|SHIFT', action = wezterm.action.MoveTabRelative(-1) },
+  { key = '>', mods = 'CTRL|SHIFT', action = wezterm.action.MoveTabRelative(1) },
   { key = "L", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(1) },
   { key = "H", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
   { key = "l", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
@@ -199,8 +201,6 @@ config.keys = {
   { key = 'k', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(-1) },
   { key = 'j', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(1) },
   { key = 's', mods = 'LEADER', action = wezterm.action.ShowTabNavigator },
-  { key = 'c', mods = 'ALT', action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
-  { key = 'v', mods = 'ALT', action = wezterm.action.PasteFrom 'Clipboard' },
   { key = 'S', mods = 'LEADER', action = wezterm.action.Search("CurrentSelectionOrEmptyString")},
   { key = 'c', mods = 'CTRL|SHIFT', action = wezterm.action { EmitEvent = "select-and-paste" } },
   { key = 'N', mods = 'LEADER', action = wezterm.action_callback(function(win, pane)
@@ -245,5 +245,15 @@ config.keys = {
     },
   },
 }
+
+if wezterm.target_triple:find("darwin") == nil then
+  local added_keys = {
+    { key = 'c', mods = 'ALT', action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
+    { key = 'v', mods = 'ALT', action = wezterm.action.PasteFrom 'Clipboard' },
+  }
+  for _, v in ipairs(added_keys) do
+     table.insert(config.keys, v)
+  end
+end
 
 return config
