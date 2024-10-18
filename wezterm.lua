@@ -39,6 +39,8 @@ wezterm.on('select-and-paste', function(window, pane)
   wezterm.action.PasteFrom 'Clipboard'
 end)
 
+Alt = 'ALT'
+NonAlt = 'META'
 if wezterm.target_triple:find("windows") ~= nil then
   config.default_domain = 'WSL:Ubuntu'
   config.window_decorations = "RESIZE"
@@ -49,6 +51,8 @@ if wezterm.target_triple:find("windows") ~= nil then
     bottom = 5,
   }
 elseif wezterm.target_triple:find("darwin") ~= nil then
+  Alt = 'OPT'
+  NonAlt = 'CMD'
   config.window_decorations = "RESIZE"
   config.set_environment_variables = {
    PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin:/opt/homebrew/bin:/usr/local/bin",
@@ -152,6 +156,13 @@ config.keys = {
     },
   },
   {
+    key = '-',
+    mods = 'LEADER',
+    action = wezterm.action.SplitVertical {
+        domain = 'CurrentPaneDomain',
+    },
+  },
+  {
     key = '\\',
     mods = 'LEADER',
     action = wezterm.action.SplitHorizontal {
@@ -159,13 +170,13 @@ config.keys = {
     },
   },
   {
-    key = 'w',
+    key = 'W',
     mods = 'CTRL|SHIFT',
     action = wezterm.action.CloseCurrentPane { confirm = false },
   },
   {
-    key = 'q',
-    mods = 'LEADER',
+    key = 'Q',
+    mods = 'CTRL|SHIFT',
     action = wezterm.action.CloseCurrentPane { confirm = false },
   },
   {
@@ -183,14 +194,19 @@ config.keys = {
     mods = 'LEADER',
     action = wezterm.action.TogglePaneZoomState,
   },
-  { key = '<', mods = 'CTRL|SHIFT', action = wezterm.action.MoveTabRelative(-1) },
-  { key = '>', mods = 'CTRL|SHIFT', action = wezterm.action.MoveTabRelative(1) },
+  {
+    key = '\'',
+    mods = 'CTRL|SHIFT',
+    action = wezterm.action.TogglePaneZoomState,
+  },
+  { key = '[', mods = 'CTRL|SHIFT', action = wezterm.action.MoveTabRelative(-1) },
+  { key = ']', mods = 'CTRL|SHIFT', action = wezterm.action.MoveTabRelative(1) },
   { key = "L", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(1) },
   { key = "H", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
-  { key = "l", mods = "LEADER", action = wezterm.action.ActivateTabRelative(1) },
-  { key = "Tab", mods = "SHIFT", action = wezterm.action.ActivatePaneDirection('Next') },
-  { key = "Tab", mods = "SHIFT|CTRL", action = wezterm.action.ActivatePaneDirection('Prev') },
-  { key = "h", mods = "LEADER", action = wezterm.action.ActivateTabRelative(-1) },
+  { key = "Tab", mods = Alt, action = wezterm.action.ActivatePaneDirection('Next') },
+  { key = "Tab", mods = Alt .. "|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev') },
+  { key = ")", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Next') },
+  { key = "(", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev') },
   { key = '+', mods = 'CTRL|SHIFT', action = wezterm.action.IncreaseFontSize },
   { key = '_', mods = 'CTRL|SHIFT', action = wezterm.action.DecreaseFontSize },
   { key = "b", mods = "CTRL|SHIFT", action = wezterm.action{ EmitEvent = "trigger-vim-with-scrollback" } },
@@ -201,21 +217,27 @@ config.keys = {
   { key = 'k', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(-1) },
   { key = 'j', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(1) },
   { key = 's', mods = 'LEADER', action = wezterm.action.ShowTabNavigator },
-  { key = 'S', mods = 'LEADER', action = wezterm.action.Search("CurrentSelectionOrEmptyString")},
+  { key = 'F', mods = 'LEADER', action = wezterm.action.Search("CurrentSelectionOrEmptyString")},
   { key = 'c', mods = 'CTRL|SHIFT', action = wezterm.action { EmitEvent = "select-and-paste" } },
+  { key = 'M', mods = 'CTRL|SHIFT', action = wezterm.action.AdjustPaneSize { 'Left', 1 } },
+  { key = '?', mods = 'CTRL|SHIFT', action = wezterm.action.AdjustPaneSize { 'Right', 1 } },
+  { key = '>', mods = 'CTRL|SHIFT', action = wezterm.action.AdjustPaneSize { 'Up', 1 } },
+  { key = '<', mods = 'CTRL|SHIFT', action = wezterm.action.AdjustPaneSize { 'Down', 1 } },
+  { key = 'c', mods = NonAlt, action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
+  { key = 'v', mods = NonAlt, action = wezterm.action.PasteFrom 'Clipboard' },
   { key = 'N', mods = 'LEADER', action = wezterm.action_callback(function(win, pane)
       local tab, window = pane:move_to_new_window()
     end)
   },
   {
-    key = 'n',
+    key = 'N',
     mods = 'LEADER',
     action = wezterm.action_callback(function(win, pane)
       local tab, window = pane:move_to_new_tab()
     end),
   },
   {
-    key = 'w',
+    key = 'f',
     mods = 'LEADER',
     action = wezterm.action.QuickSelectArgs {
       patterns = {
@@ -224,7 +246,7 @@ config.keys = {
     },
   },
   {
-    key = 'W',
+    key = 'F',
     mods = 'LEADER',
     action = wezterm.action.QuickSelectArgs {
       patterns = {
@@ -244,16 +266,61 @@ config.keys = {
       end),
     },
   },
+  {
+    key = 'd',
+    mods = 'CTRL|SHIFT',
+    action = wezterm.action.SwitchToWorkspace {
+      name = 'default',
+    },
+  },
+  { key = 'W', mods = 'LEADER', action = wezterm.action.SwitchToWorkspace },
+  {
+    key = 'S',
+    mods = 'LEADER',
+    action = wezterm.action.ShowLauncherArgs {
+      flags = 'WORKSPACES',
+    },
+  },
+  {
+    key = 'w',
+    mods = 'LEADER',
+    action = wezterm.action.PromptInputLine {
+      description = wezterm.format {
+        { Foreground = { AnsiColor = 'Yellow' } },
+        { Text = 'Enter name for new workspace' },
+      },
+      action = wezterm.action_callback(function(window, pane, line)
+        if line then
+          window:perform_action(
+            wezterm.action.SwitchToWorkspace {
+              name = line,
+            },
+            pane
+          )
+        end
+      end),
+    },
+  },
+  { key = 'l', mods = 'LEADER', action = wezterm.action.SwitchWorkspaceRelative(1) },
+  { key = 'h', mods = 'LEADER', action = wezterm.action.SwitchWorkspaceRelative(-1) },
 }
 
-if wezterm.target_triple:find("darwin") == nil then
-  local added_keys = {
-    { key = 'c', mods = 'ALT', action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
-    { key = 'v', mods = 'ALT', action = wezterm.action.PasteFrom 'Clipboard' },
-  }
-  for _, v in ipairs(added_keys) do
-     table.insert(config.keys, v)
-  end
-end
+-- if wezterm.target_triple:find("darwin") == nil then
+--   local added_keys = {
+--     { key = 'c', mods = 'ALT', action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
+--     { key = 'v', mods = 'ALT', action = wezterm.action.PasteFrom 'Clipboard' },
+--   }
+--   for _, v in ipairs(added_keys) do
+--      table.insert(config.keys, v)
+--   end
+-- else
+--   local added_keys = {
+--     { key = 'c', mods = 'CMD', action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
+--     { key = 'v', mods = 'CMD', action = wezterm.action.PasteFrom 'Clipboard' },
+--   }
+--   for _, v in ipairs(added_keys) do
+--      table.insert(config.keys, v)
+--   end
+-- end
 
 return config
