@@ -86,6 +86,16 @@ config.leader = { key = 'Space', mods = 'CTRL|SHIFT', timeout_milliseconds = 100
 config.window_close_confirmation = "NeverPrompt"
 config.adjust_window_size_when_changing_font_size = false
 config.window_background_opacity = 0.99
+config.use_fancy_tab_bar = false
+config.show_new_tab_button_in_tab_bar = false
+config.tab_and_split_indices_are_zero_based = true
+config.text_blink_rate = 300
+config.default_cursor_style = 'BlinkingUnderline'
+-- config.default_cursor_style = 'BlinkingBlock'
+config.cursor_thickness = 2.5
+config.cursor_blink_rate = 300
+config.cursor_blink_ease_in = "Constant"
+config.cursor_blink_ease_out = "Constant"
 config.colors = {
     tab_bar = {
         background = "rgba(0,0,0,0)"
@@ -190,11 +200,6 @@ config.keys = {
     action = wezterm.action.SpawnTab 'DefaultDomain'
   },
   {
-    key = 'Space',
-    mods = 'LEADER',
-    action = wezterm.action.TogglePaneZoomState,
-  },
-  {
     key = '\'',
     mods = 'CTRL|SHIFT',
     action = wezterm.action.TogglePaneZoomState,
@@ -210,8 +215,8 @@ config.keys = {
   { key = '+', mods = 'CTRL|SHIFT', action = wezterm.action.IncreaseFontSize },
   { key = '_', mods = 'CTRL|SHIFT', action = wezterm.action.DecreaseFontSize },
   { key = "b", mods = "CTRL|SHIFT", action = wezterm.action{ EmitEvent = "trigger-vim-with-scrollback" } },
-  { key = '}', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(-1) },
-  { key = '{', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(1) },
+  { key = 'u', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(-1) },
+  { key = 'd', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(1) },
   { key = 'k', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(-1) },
   { key = 'j', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(1) },
   { key = 'k', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(-1) },
@@ -264,13 +269,6 @@ config.keys = {
           window:active_tab():set_title(line)
         end
       end),
-    },
-  },
-  {
-    key = 'd',
-    mods = 'CTRL|SHIFT',
-    action = wezterm.action.SwitchToWorkspace {
-      name = 'default',
     },
   },
   { key = 'W', mods = 'LEADER', action = wezterm.action.SwitchToWorkspace },
