@@ -90,9 +90,8 @@ config.use_fancy_tab_bar = false
 config.show_new_tab_button_in_tab_bar = false
 config.tab_and_split_indices_are_zero_based = true
 config.text_blink_rate = 300
-config.default_cursor_style = 'BlinkingUnderline'
--- config.default_cursor_style = 'BlinkingBlock'
-config.cursor_thickness = 2.5
+config.default_cursor_style = 'BlinkingBar'
+config.cursor_thickness = 1
 config.cursor_blink_rate = 300
 config.cursor_blink_ease_in = "Constant"
 config.cursor_blink_ease_out = "Constant"
@@ -204,8 +203,8 @@ config.keys = {
     mods = 'CTRL|SHIFT',
     action = wezterm.action.TogglePaneZoomState,
   },
-  { key = '[', mods = 'CTRL|SHIFT', action = wezterm.action.MoveTabRelative(-1) },
-  { key = ']', mods = 'CTRL|SHIFT', action = wezterm.action.MoveTabRelative(1) },
+  { key = '{', mods = 'CTRL|SHIFT', action = wezterm.action.MoveTabRelative(-1) },
+  { key = '}', mods = 'CTRL|SHIFT', action = wezterm.action.MoveTabRelative(1) },
   { key = "L", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(1) },
   { key = "H", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
   { key = "Tab", mods = Alt, action = wezterm.action.ActivatePaneDirection('Next') },
@@ -214,16 +213,15 @@ config.keys = {
   { key = "(", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev') },
   { key = '+', mods = 'CTRL|SHIFT', action = wezterm.action.IncreaseFontSize },
   { key = '_', mods = 'CTRL|SHIFT', action = wezterm.action.DecreaseFontSize },
-  { key = "b", mods = "CTRL|SHIFT", action = wezterm.action{ EmitEvent = "trigger-vim-with-scrollback" } },
-  { key = 'u', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(-1) },
-  { key = 'd', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(1) },
-  { key = 'k', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(-1) },
-  { key = 'j', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(1) },
+  { key = "B", mods = "CTRL|SHIFT", action = wezterm.action{ EmitEvent = "trigger-vim-with-scrollback" } },
+  { key = 'U', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(-1) },
+  { key = 'D', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(1) },
+  { key = 'K', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(-1) },
+  { key = 'J', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(1) },
   { key = 'k', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(-1) },
   { key = 'j', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(1) },
   { key = 's', mods = 'LEADER', action = wezterm.action.ShowTabNavigator },
-  { key = 'F', mods = 'LEADER', action = wezterm.action.Search("CurrentSelectionOrEmptyString")},
-  { key = 'c', mods = 'CTRL|SHIFT', action = wezterm.action { EmitEvent = "select-and-paste" } },
+  { key = 'C', mods = 'CTRL|SHIFT', action = wezterm.action { EmitEvent = "select-and-paste" } },
   { key = 'M', mods = 'CTRL|SHIFT', action = wezterm.action.AdjustPaneSize { 'Left', 5 } },
   { key = '?', mods = 'CTRL|SHIFT', action = wezterm.action.AdjustPaneSize { 'Right', 5 } },
   { key = '>', mods = 'CTRL|SHIFT', action = wezterm.action.AdjustPaneSize { 'Up', 5 } },
@@ -251,11 +249,20 @@ config.keys = {
     },
   },
   {
-    key = 'F',
+    key = 'f',
     mods = 'LEADER',
     action = wezterm.action.QuickSelectArgs {
       patterns = {
         '\\S+',
+      },
+    },
+  },
+  {
+    key = 'g',
+    mods = 'CTRL|SHIFT',
+    action = wezterm.action.QuickSelectArgs {
+      patterns = {
+        '[^$^]+',
       },
     },
   },
@@ -284,7 +291,7 @@ config.keys = {
     mods = 'LEADER',
     action = wezterm.action.PromptInputLine {
       description = wezterm.format {
-        { Foreground = { AnsiColor = 'Yellow' } },
+        { Foreground = { Color = '#ffd700' } },
         { Text = 'Enter name for new workspace' },
       },
       action = wezterm.action_callback(function(window, pane, line)
@@ -302,23 +309,5 @@ config.keys = {
   { key = 'l', mods = 'LEADER', action = wezterm.action.SwitchWorkspaceRelative(1) },
   { key = 'h', mods = 'LEADER', action = wezterm.action.SwitchWorkspaceRelative(-1) },
 }
-
--- if wezterm.target_triple:find("darwin") == nil then
---   local added_keys = {
---     { key = 'c', mods = 'ALT', action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
---     { key = 'v', mods = 'ALT', action = wezterm.action.PasteFrom 'Clipboard' },
---   }
---   for _, v in ipairs(added_keys) do
---      table.insert(config.keys, v)
---   end
--- else
---   local added_keys = {
---     { key = 'c', mods = 'CMD', action = wezterm.action.CopyTo 'ClipboardAndPrimarySelection' },
---     { key = 'v', mods = 'CMD', action = wezterm.action.PasteFrom 'Clipboard' },
---   }
---   for _, v in ipairs(added_keys) do
---      table.insert(config.keys, v)
---   end
--- end
 
 return config
