@@ -86,7 +86,7 @@ config.leader = { key = 'Space', mods = 'CTRL|SHIFT', timeout_milliseconds = 100
 config.window_close_confirmation = "NeverPrompt"
 config.adjust_window_size_when_changing_font_size = false
 config.window_background_opacity = 0.99
-config.use_fancy_tab_bar = false
+-- config.use_fancy_tab_bar = false
 config.show_new_tab_button_in_tab_bar = false
 config.tab_and_split_indices_are_zero_based = true
 config.text_blink_rate = 300
@@ -199,7 +199,7 @@ config.keys = {
     action = wezterm.action.SpawnTab 'DefaultDomain'
   },
   {
-    key = '\'',
+    key = '"',
     mods = 'CTRL|SHIFT',
     action = wezterm.action.TogglePaneZoomState,
   },
@@ -209,15 +209,15 @@ config.keys = {
   { key = "H", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
   { key = "Tab", mods = Alt, action = wezterm.action.ActivatePaneDirection('Next') },
   { key = "Tab", mods = Alt .. "|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev') },
-  { key = ")", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Next') },
-  { key = "(", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev') },
+  { key = "J", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Next') },
+  { key = "K", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev') },
   { key = '+', mods = 'CTRL|SHIFT', action = wezterm.action.IncreaseFontSize },
   { key = '_', mods = 'CTRL|SHIFT', action = wezterm.action.DecreaseFontSize },
   { key = "B", mods = "CTRL|SHIFT", action = wezterm.action{ EmitEvent = "trigger-vim-with-scrollback" } },
   { key = 'U', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(-1) },
   { key = 'D', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(1) },
-  { key = 'K', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(-1) },
-  { key = 'J', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(1) },
+  { key = ')', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(-1) },
+  { key = '(', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(1) },
   { key = 'k', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(-1) },
   { key = 'j', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(1) },
   { key = 's', mods = 'LEADER', action = wezterm.action.ShowTabNavigator },
@@ -233,7 +233,7 @@ config.keys = {
     end)
   },
   {
-    key = 'N',
+    key = 'n',
     mods = 'LEADER',
     action = wezterm.action_callback(function(win, pane)
       local tab, window = pane:move_to_new_tab()
