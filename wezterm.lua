@@ -41,6 +41,7 @@ end)
 
 Alt = 'ALT'
 NonAlt = 'META'
+AltAlt = 'ALT'
 if wezterm.target_triple:find("windows") ~= nil then
   config.default_domain = 'WSL:Ubuntu'
   config.window_decorations = "RESIZE"
@@ -53,6 +54,7 @@ if wezterm.target_triple:find("windows") ~= nil then
 elseif wezterm.target_triple:find("darwin") ~= nil then
   Alt = 'OPT'
   NonAlt = 'CMD'
+  AltAlt = 'CMD'
   config.window_decorations = "RESIZE"
   config.set_environment_variables = {
    PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin:/opt/homebrew/bin:/usr/local/bin",
@@ -209,15 +211,17 @@ config.keys = {
   { key = "H", mods = "CTRL|SHIFT", action = wezterm.action.ActivateTabRelative(-1) },
   { key = "Tab", mods = Alt, action = wezterm.action.ActivatePaneDirection('Next') },
   { key = "Tab", mods = Alt .. "|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev') },
-  { key = ")", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Next') },
-  { key = "(", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev') },
+  { key = ")", mods = "CTRL|SHIFT", action = wezterm.action.ScrollByLine(-1) },
+  { key = "(", mods = "CTRL|SHIFT", action = wezterm.action.ScrollByLine(1) },
+  { key = "j", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Next') },
+  { key = "k", mods = "CTRL|SHIFT", action = wezterm.action.ActivatePaneDirection('Prev') },
   { key = '+', mods = 'CTRL|SHIFT', action = wezterm.action.IncreaseFontSize },
   { key = '_', mods = 'CTRL|SHIFT', action = wezterm.action.DecreaseFontSize },
-  { key = "B", mods = "CTRL|SHIFT", action = wezterm.action{ EmitEvent = "trigger-vim-with-scrollback" } },
-  { key = 'U', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(-1) },
-  { key = 'D', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(1) },
-  { key = 'K', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(-1) },
-  { key = 'J', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByLine(1) },
+  { key = "b", mods = "CTRL|SHIFT", action = wezterm.action{ EmitEvent = "trigger-vim-with-scrollback" } },
+  { key = 'u', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(-1) },
+  { key = 'd', mods = 'CTRL|SHIFT', action = wezterm.action.ScrollByPage(1) },
+  { key = 'k', mods = 'CTRL|SHIFT|' .. Alt, action = wezterm.action.ScrollByLine(-1) },
+  { key = 'j', mods = 'CTRL|SHIFT|' .. Alt, action = wezterm.action.ScrollByLine(1) },
   { key = 'k', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(-1) },
   { key = 'j', mods = 'LEADER', action = wezterm.action.ScrollToPrompt(1) },
   { key = 's', mods = 'LEADER', action = wezterm.action.ShowTabNavigator },
@@ -270,7 +274,10 @@ config.keys = {
     key = 'r',
     mods = 'LEADER',
     action = wezterm.action.PromptInputLine {
-      description = 'Rename tab:',
+      description = wezterm.format {
+        { Foreground = { Color = '#ffd700' } },
+        { Text = 'Rename tab:' },
+      },
       action = wezterm.action_callback(function(window, pane, line)
         if line then
           window:active_tab():set_title(line)
@@ -292,7 +299,7 @@ config.keys = {
     action = wezterm.action.PromptInputLine {
       description = wezterm.format {
         { Foreground = { Color = '#ffd700' } },
-        { Text = 'Enter name for new workspace' },
+        { Text = 'Workspace name:' },
       },
       action = wezterm.action_callback(function(window, pane, line)
         if line then
@@ -304,6 +311,13 @@ config.keys = {
           )
         end
       end),
+    },
+  },
+  {
+    key = 'I',
+    mods = 'SHIFT|CTRL',
+    action = wezterm.action.Search {
+      Regex = '',
     },
   },
   { key = 'l', mods = 'LEADER', action = wezterm.action.SwitchWorkspaceRelative(1) },
