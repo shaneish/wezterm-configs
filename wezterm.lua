@@ -92,7 +92,7 @@ config.use_fancy_tab_bar = true
 config.show_new_tab_button_in_tab_bar = false
 config.tab_and_split_indices_are_zero_based = true
 config.text_blink_rate = 300
-config.default_cursor_style = 'BlinkingBar'
+-- config.default_cursor_style = 'BlinkingBar'
 config.cursor_thickness = 1
 config.cursor_blink_rate = 300
 config.cursor_blink_ease_in = "Constant"
@@ -143,6 +143,37 @@ config.key_tables = {
     },
     { key = 'Escape', action = 'PopKeyTable' },
   },
+  scroll_mode = {
+    { key = "Escape", action = 'PopKeyTable' },
+
+    { key = "UpArrow", action = wezterm.action.ScrollByLine(-1) },
+    { key = "DownArrow", action = wezterm.action.ScrollByLine(1) },
+    { key = "k", action = wezterm.action.ScrollByLine(-1) },
+    { key = "j", action = wezterm.action.ScrollByLine(1) },
+
+    { key = "UpArrow", mods = "SHIFT", action = wezterm.action.ScrollByLine(-5) },
+    { key = "DownArrow", mods = "SHIFT", action = wezterm.action.ScrollByLine(5) },
+    { key = "K", mods = "SHIFT", action = wezterm.action.ScrollByLine(-5) },
+    { key = "J", mods = "SHIFT", action = wezterm.action.ScrollByLine(5) },
+
+    { key = "k", mods = "CTRL", action = wezterm.action.ScrollByPage(-0.5) },
+    { key = "j", mods = "CTRL", action = wezterm.action.ScrollByPage(0.5) },
+    { key = "k", mods = "CTRL|SHIFT", action = wezterm.action.ScrollByPage(-1) },
+    { key = "j", mods = "CTRL|SHIFT", action = wezterm.action.ScrollByPage(1) },
+
+    { key = "p", action = wezterm.action.ScrollToPrompt(-1) },
+    { key = "n", action = wezterm.action.ScrollToPrompt(1) },
+    { key = "{", action = wezterm.action.ScrollToPrompt(-1) },
+    { key = "}", action = wezterm.action.ScrollToPrompt(1) },
+
+    { key = "g", action = wezterm.action.ScrollToTop },
+    { key = "G", mods = "SHIFT", action = wezterm.action.ScrollToBottom },
+
+    { key = "z", action = wezterm.action.TogglePaneZoomState },
+
+    { key = "y", action = wezterm.action.ActivateCopyMode },
+    { key = "/", action = wezterm.action.Search("CurrentSelectionOrEmptyString") },
+  },
 }
 
 config.keys = {
@@ -156,6 +187,14 @@ config.keys = {
     mods = 'LEADER',
     action = wezterm.action.ActivateKeyTable {
         name = 'pane_adjust',
+        one_shot = false,
+    },
+  },
+  {
+    key = 'Space',
+    mods = 'LEADER',
+    action = wezterm.action.ActivateKeyTable {
+        name = 'scroll_mode',
         one_shot = false,
     },
   },
@@ -245,7 +284,7 @@ config.keys = {
   },
   {
     key = 'f',
-    mods = 'CTRL|SHIFT',
+    mods = 'LEADER',
     action = wezterm.action.QuickSelectArgs {
       patterns = {
         '[\\w\\-\\.\\/~]+',
@@ -254,7 +293,7 @@ config.keys = {
   },
   {
     key = 'f',
-    mods = 'LEADER',
+    mods = 'CTRL|SHIFT',
     action = wezterm.action.QuickSelectArgs {
       patterns = {
         '\\S+',
