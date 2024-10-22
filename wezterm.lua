@@ -88,7 +88,7 @@ config.leader = { key = 'Space', mods = 'CTRL|SHIFT', timeout_milliseconds = 100
 config.window_close_confirmation = "NeverPrompt"
 config.adjust_window_size_when_changing_font_size = false
 config.window_background_opacity = 0.99
-config.use_fancy_tab_bar = false
+config.use_fancy_tab_bar = true
 config.show_new_tab_button_in_tab_bar = false
 config.tab_and_split_indices_are_zero_based = true
 config.text_blink_rate = 300
@@ -103,7 +103,7 @@ config.colors = {
     },
 }
 config.window_frame = {
-    font_size = 7.5
+    font_size = 12
 }
 config.inactive_pane_hsb = {
   hue = 1.2,
@@ -245,7 +245,7 @@ config.keys = {
   },
   {
     key = 'f',
-    mods = 'LEADER',
+    mods = 'CTRL|SHIFT',
     action = wezterm.action.QuickSelectArgs {
       patterns = {
         '[\\w\\-\\.\\/~]+',
