@@ -41,6 +41,7 @@ end)
 
 Alt = 'ALT'
 NonAlt = 'META'
+AltAlt = 'ALT'
 if wezterm.target_triple:find("windows") ~= nil then
   config.default_domain = 'WSL:Ubuntu'
   config.window_decorations = "RESIZE"
@@ -53,6 +54,7 @@ if wezterm.target_triple:find("windows") ~= nil then
 elseif wezterm.target_triple:find("darwin") ~= nil then
   Alt = 'OPT'
   NonAlt = 'CMD'
+  AltAlt = 'CMD'
   config.window_decorations = "RESIZE"
   config.set_environment_variables = {
    PATH = "$PATH:$HOME/.fzf/bin:$HOME/.cargo/bin:$HOME/.local/bin:/usr/bin:/bin:/opt/homebrew/bin:/usr/local/bin",
@@ -86,11 +88,10 @@ config.leader = { key = 'Space', mods = 'CTRL|SHIFT', timeout_milliseconds = 100
 config.window_close_confirmation = "NeverPrompt"
 config.adjust_window_size_when_changing_font_size = false
 config.window_background_opacity = 0.99
--- config.use_fancy_tab_bar = false
+config.use_fancy_tab_bar = true
 config.show_new_tab_button_in_tab_bar = false
 config.tab_and_split_indices_are_zero_based = true
 config.text_blink_rate = 300
-config.default_cursor_style = 'BlinkingBar'
 config.cursor_thickness = 1
 config.cursor_blink_rate = 300
 config.cursor_blink_ease_in = "Constant"
@@ -101,7 +102,7 @@ config.colors = {
     },
 }
 config.window_frame = {
-    font_size = 7.5
+    font_size = 12
 }
 config.inactive_pane_hsb = {
   hue = 1.2,
@@ -141,6 +142,37 @@ config.key_tables = {
     },
     { key = 'Escape', action = 'PopKeyTable' },
   },
+  scroll_mode = {
+    { key = "Escape", action = 'PopKeyTable' },
+
+    { key = "UpArrow", action = wezterm.action.ScrollByLine(-1) },
+    { key = "DownArrow", action = wezterm.action.ScrollByLine(1) },
+    { key = "k", action = wezterm.action.ScrollByLine(-1) },
+    { key = "j", action = wezterm.action.ScrollByLine(1) },
+
+    { key = "UpArrow", mods = "SHIFT", action = wezterm.action.ScrollByLine(-5) },
+    { key = "DownArrow", mods = "SHIFT", action = wezterm.action.ScrollByLine(5) },
+    { key = "K", mods = "SHIFT", action = wezterm.action.ScrollByLine(-5) },
+    { key = "J", mods = "SHIFT", action = wezterm.action.ScrollByLine(5) },
+
+    { key = "k", mods = "CTRL", action = wezterm.action.ScrollByPage(-0.5) },
+    { key = "j", mods = "CTRL", action = wezterm.action.ScrollByPage(0.5) },
+    { key = "k", mods = "CTRL|SHIFT", action = wezterm.action.ScrollByPage(-1) },
+    { key = "j", mods = "CTRL|SHIFT", action = wezterm.action.ScrollByPage(1) },
+
+    { key = "p", action = wezterm.action.ScrollToPrompt(-1) },
+    { key = "n", action = wezterm.action.ScrollToPrompt(1) },
+    { key = "{", action = wezterm.action.ScrollToPrompt(-1) },
+    { key = "}", action = wezterm.action.ScrollToPrompt(1) },
+
+    { key = "g", action = wezterm.action.ScrollToTop },
+    { key = "G", mods = "SHIFT", action = wezterm.action.ScrollToBottom },
+
+    { key = "z", action = wezterm.action.TogglePaneZoomState },
+
+    { key = "y", action = wezterm.action.ActivateCopyMode },
+    { key = "/", action = wezterm.action.Search("CurrentSelectionOrEmptyString") },
+  },
 }
 
 config.keys = {
@@ -154,6 +186,14 @@ config.keys = {
     mods = 'LEADER',
     action = wezterm.action.ActivateKeyTable {
         name = 'pane_adjust',
+        one_shot = false,
+    },
+  },
+  {
+    key = 'Space',
+    mods = 'LEADER',
+    action = wezterm.action.ActivateKeyTable {
+        name = 'scroll_mode',
         one_shot = false,
     },
   },
@@ -250,7 +290,7 @@ config.keys = {
   },
   {
     key = 'f',
-    mods = 'LEADER',
+    mods = 'CTRL|SHIFT',
     action = wezterm.action.QuickSelectArgs {
       patterns = {
         '\\S+',
@@ -270,7 +310,10 @@ config.keys = {
     key = 'r',
     mods = 'LEADER',
     action = wezterm.action.PromptInputLine {
-      description = 'Rename tab:',
+      description = wezterm.format {
+        { Foreground = { Color = '#ffd700' } },
+        { Text = 'Rename tab:' },
+      },
       action = wezterm.action_callback(function(window, pane, line)
         if line then
           window:active_tab():set_title(line)
@@ -292,7 +335,7 @@ config.keys = {
     action = wezterm.action.PromptInputLine {
       description = wezterm.format {
         { Foreground = { Color = '#ffd700' } },
-        { Text = 'Enter name for new workspace' },
+        { Text = 'Workspace name:' },
       },
       action = wezterm.action_callback(function(window, pane, line)
         if line then
@@ -304,6 +347,13 @@ config.keys = {
           )
         end
       end),
+    },
+  },
+  {
+    key = 'I',
+    mods = 'SHIFT|CTRL',
+    action = wezterm.action.Search {
+      Regex = '',
     },
   },
   { key = 'l', mods = 'LEADER', action = wezterm.action.SwitchWorkspaceRelative(1) },
